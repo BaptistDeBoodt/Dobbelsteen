@@ -2,14 +2,13 @@ import { Perf } from "r3f-perf";
 import { Environment } from "@react-three/drei";
 import { useState, useRef, useEffect } from "react";
 import { useThree, useFrame } from "@react-three/fiber";
-import * as THREE from "three";
 
 import { scenes } from "./data/data.js";
 import POI from "./components/POI.jsx";
 import NAV from "./components/NAV.jsx";
 import HELP from "./components/HELP.jsx";
 
-export default function Experience() {
+export default function Experience({ setSelectedPOI }) {
   const [currentSceneId, setCurrentSceneId] = useState(1);
   const scene = scenes.find(s => s.id === currentSceneId);
 
@@ -20,24 +19,20 @@ export default function Experience() {
   const draggingRef = useRef(false);
   const lastPosRef = useRef([0, 0]);
 
-  // Hardcoded zoom settings
   const initialFov = 100;
   const minFov = 20;
   const maxFov = 100;
 
-  // Set initial camera zoom
   useEffect(() => {
     camera.fov = initialFov;
     camera.updateProjectionMatrix();
-  }, [camera, initialFov]);
+  }, [camera]);
 
-  // Update camera position & rotation
   useFrame(() => {
     camera.position.set(-0.45, 4.83, 0.04);
     camera.rotation.set(pitchRef.current, yawRef.current, 0, "YXZ");
   });
 
-  // Drag and zoom logic (unchanged, simplified)
   useEffect(() => {
     const el = gl.domElement;
 
@@ -56,11 +51,9 @@ export default function Experience() {
 
     const onPointerMove = (e) => {
       if (!draggingRef.current) return;
-      const sx = e.clientX;
-      const sy = e.clientY;
       const [lx, ly] = lastPosRef.current;
-      const dx = lx - sx;
-      const dy = ly - sy;
+      const dx = lx - e.clientX;
+      const dy = ly - e.clientY;
 
       yawRef.current -= dx * 0.0025;
       pitchRef.current -= dy * 0.0025;
@@ -68,7 +61,7 @@ export default function Experience() {
       const maxPitch = Math.PI / 2 - 0.01;
       pitchRef.current = Math.max(-maxPitch, Math.min(maxPitch, pitchRef.current));
 
-      lastPosRef.current = [sx, sy];
+      lastPosRef.current = [e.clientX, e.clientY];
       e.preventDefault();
     };
 
@@ -87,12 +80,11 @@ export default function Experience() {
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
     };
-  }, [gl.domElement, minFov, maxFov, camera]);
+  }, [gl.domElement, camera]);
 
   return (
     <>
       <Perf position="top-left" />
-
       <Environment
         files={scene.env}
         background
@@ -106,13 +98,14 @@ export default function Experience() {
       <ambientLight intensity={2} />
       <directionalLight position={[5, 5, 2]} intensity={0.7} castShadow />
 
-      {/* POIs */}
+      {/* POIs - call setSelectedPOI on click */}
       {scene.pois.map((poi) => (
         <POI
           key={poi.id}
           position={poi.position}
           title={poi.title}
           description={poi.description}
+          onClick={() => setSelectedPOI(poi)}
         />
       ))}
 

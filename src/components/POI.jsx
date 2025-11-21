@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 
-const POI = ({ position, title, description, image }) => {
+const POI = ({ position, title, description, image, onClick }) => {
   const meshRef = useRef();
 
   useFrame(() => {
@@ -17,15 +17,16 @@ const POI = ({ position, title, description, image }) => {
       position={position}
       castShadow
       receiveShadow
+      onClick={onClick}  // <-- Add this so clicks work
       onPointerEnter={(e) => (document.body.style.cursor = "pointer")}
       onPointerLeave={(e) => (document.body.style.cursor = "default")}
     >
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial
         color="orange"
-        roughness={0.3}  // less rough = more shiny
-        metalness={0.6}  // metallic feel
-        envMapIntensity={0.8}  // reflect environment a bit
+        roughness={0.3}
+        metalness={0.6}
+        envMapIntensity={0.8}
       />
     </mesh>
   );
