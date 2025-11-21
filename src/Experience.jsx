@@ -112,7 +112,7 @@ export default function Experience() {
       <Perf position="top-left" />
 
       <Environment
-        files="/environmentMaps/Street View 360.jpg"
+        files="/environmentMaps/playground.jpg"
         background
         ground={{
           height: 7,
