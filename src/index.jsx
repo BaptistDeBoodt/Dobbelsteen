@@ -5,10 +5,6 @@ import Experience from './Experience.jsx'
 
 const root = ReactDOM.createRoot(document.querySelector('#root'))
 
-// const created = ({ gl }) => {
-//     gl.setClearColor("#ff0000", 1);
-// }
-
 root.render(
     <Canvas
         shadows
