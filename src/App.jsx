@@ -7,18 +7,6 @@ import { useState, useEffect } from 'react'
 
 const App = () => {
   const [selectedPOI, setSelectedPOI] = useState(null)
-  const [showInterface, setShowInterface] = useState(false)
-
-  // When selectedPOI changes, toggle showInterface with a slight delay for fade-in
-  useEffect(() => {
-    if (selectedPOI) {
-      setShowInterface(true)
-    } else {
-      // On close, wait for fade-out animation before hiding
-      const timeout = setTimeout(() => setShowInterface(false), 400)
-      return () => clearTimeout(timeout)
-    }
-  }, [selectedPOI])
 
   return (
     <>
@@ -26,22 +14,17 @@ const App = () => {
         <Experience setSelectedPOI={setSelectedPOI} />
       </Canvas>
 
-      {/* Render interface container only when showInterface true */}
-      {showInterface && (
         <div
           className={`interface-wrapper ${selectedPOI ? 'visible' : ''}`}
-          // Optional: prevent click propagation if needed
           onClick={() => setSelectedPOI(null)}
         >
           <div
             className="interface"
-            onClick={(e) => e.stopPropagation()} // prevent close when clicking inside interface
+            onClick={(e) => e.stopPropagation()}
           >
-            <Interface selectedPOI={selectedPOI} />
-            <button onClick={() => setSelectedPOI(null)}>Close</button>
+            <Interface selectedPOI={selectedPOI} setSelectedPOI={setSelectedPOI} />
           </div>
         </div>
-      )}
     </>
   )
 }

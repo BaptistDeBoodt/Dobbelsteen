@@ -7,6 +7,7 @@ import { scenes } from "./data/data.js";
 import POI from "./components/POI.jsx";
 import NAV from "./components/NAV.jsx";
 import HELP from "./components/HELP.jsx";
+import HELPARROW from "./components/HELPARROW.jsx";
 
 export default function Experience({ setSelectedPOI }) {
   const [currentSceneId, setCurrentSceneId] = useState(1);
@@ -84,7 +85,7 @@ export default function Experience({ setSelectedPOI }) {
 
   return (
     <>
-      <Perf position="top-left" />
+      {/* <Perf position="top-left" /> */}
       <Environment
         files={scene.env}
         background
@@ -114,12 +115,14 @@ export default function Experience({ setSelectedPOI }) {
         <NAV
           key={nav.id}
           position={nav.position}
+          rotation={nav.rotation}
           targetSceneId={nav.targetSceneId}
           setCurrentSceneId={setCurrentSceneId}
         />
       ))}
 
-      <HELP />
+      {/* <HELP />
+      <HELPARROW /> */}
     </>
   );
 }

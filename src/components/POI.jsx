@@ -1,34 +1,29 @@
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import React, { useState, useRef } from 'react';
+import { useLoader, useFrame } from '@react-three/fiber';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-const POI = ({ position, title, description, image, onClick }) => {
-  const meshRef = useRef();
+const POI = ({ position, onClick }) => {
+  const { scene } = useLoader(GLTFLoader, '/models/6 sided dice.glb');
+  const model = scene.clone();
+  const diceRef = useRef();
 
   useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.01;
-      meshRef.current.rotation.x += 0.005;
+    if (diceRef.current) {
+      diceRef.current.rotation.y += 0.01;
+      diceRef.current.rotation.x += 0.005;
     }
   });
 
   return (
-    <mesh
-      ref={meshRef}
+    <primitive
+      ref={diceRef}
+      object={model}
       position={position}
-      castShadow
-      receiveShadow
-      onClick={onClick}  // <-- Add this so clicks work
-      onPointerEnter={(e) => (document.body.style.cursor = "pointer")}
-      onPointerLeave={(e) => (document.body.style.cursor = "default")}
-    >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial
-        color="orange"
-        roughness={0.3}
-        metalness={0.6}
-        envMapIntensity={0.8}
-      />
-    </mesh>
+      scale={3}
+      onClick={onClick}
+      onPointerEnter={() => (document.body.style.cursor = "pointer")}
+      onPointerLeave={() => (document.body.style.cursor = "default")}
+    />
   );
 };
 

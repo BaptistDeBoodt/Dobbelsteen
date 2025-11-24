@@ -1,13 +1,22 @@
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import React, { useRef } from 'react';
+import { useLoader } from '@react-three/fiber';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import * as THREE from 'three';
 
-const NAV = ({ position, targetSceneId, setCurrentSceneId, castShadow  }) => {
-  const meshRef = useRef();
+const NAV = ({ position, rotation, targetSceneId, setCurrentSceneId }) => {
+  const { scene } = useLoader(GLTFLoader, '/models/Arrow.glb');
+  const model = scene.clone();
+  const arrowRef = useRef();
 
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.01;
-      meshRef.current.rotation.x += 0.005;
+  model.traverse((child) => {
+    if (child.isMesh) {
+      if (Array.isArray(child.material)) {
+        child.material.forEach(mat => {
+          if (mat.color) mat.color.set('red');
+        });
+      } else {
+        if (child.material.color) child.material.color.set('red');
+      }
     }
   });
 
@@ -16,23 +25,16 @@ const NAV = ({ position, targetSceneId, setCurrentSceneId, castShadow  }) => {
   };
 
   return (
-    <mesh
-      ref={meshRef}
+    <primitive
+      ref={arrowRef}
+      object={model}
       position={position}
+      rotation={rotation}
+      scale={4}
       onClick={handleClick}
-      castShadow={castShadow}
-      receiveShadow
-      onPointerEnter={(e) => (document.body.style.cursor = "pointer")}
-      onPointerLeave={(e) => (document.body.style.cursor = "default")}
-    >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial
-        color="red"
-        roughness={0.3}
-        metalness={0.6}
-        envMapIntensity={0.8}
-      />
-    </mesh>
+      onPointerEnter={() => (document.body.style.cursor = 'pointer')}
+      onPointerLeave={() => (document.body.style.cursor = 'default')}
+    />
   );
 };
 

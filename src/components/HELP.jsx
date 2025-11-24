@@ -6,7 +6,7 @@ const HELP = () => {
       const helpPos = useControls("HELP cube", {
         x: { value: 0, min: -50, max: 50, step: 0.1 },
         y: { value: 2, min: -10, max: 20, step: 0.1 },
-        z: { value: 5, min: -50, max: 50, step: 0.1 }
+        z: { value: 0, min: -50, max: 50, step: 0.1 }
       });
 
       const cubeRef = useRef();
