@@ -121,8 +121,8 @@ export default function Experience({ setSelectedPOI }) {
         />
       ))}
 
-      {/* <HELP />
-      <HELPARROW /> */}
+      <HELP />
+      <HELPARROW />
     </>
   );
 }
