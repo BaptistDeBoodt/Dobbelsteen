@@ -106,8 +106,8 @@ export const scenes = [
     pois: [{
       id: 401,
       position: [26.6, 5.4, 32.9],
-      title: "Bank",
-      image: "/poi/picknicktable.jpg",
+      title: "Buitenkast",
+      image: "/poi/buitenkast.png",
     },
     {
       id: 402,
